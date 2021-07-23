@@ -24,11 +24,11 @@ const addUser = async (req, res) => {
 
         }
 
-        const findUser = await userModel.find({email: infoToSave.email})
+        const findUser = await userModel.find({ email: infoToSave.email })
 
-        console.log("finduser: ",findUser[0]);
+        console.log("finduser: ", findUser[0]);
 
-        if(findUser[0] === undefined ){
+        if (findUser[0] === undefined) {
 
             await userModel.create(infoToSave)
 
@@ -54,33 +54,33 @@ const login = async (req, res) => {
 
         const password = req.body.password
 
-        
-        const findUser = await userModel.findOne({email})
-        
+
+        const findUser = await userModel.findOne({ email })
+
         console.log(findUser);
 
-        if(findUser === null){
+        if (findUser === null) {
             res.json('user not found')
         }
 
         const checkPassowrd = bcrypt.compareSync(password, findUser.password)
 
-        if(checkPassowrd){
+        if (checkPassowrd) {
 
-            const assignToken = await jwt.sign({_id: findUser._id }, config.key, {expiresIn: 3600000})
+            const assignToken = await jwt.sign({ _id: findUser._id }, config.key, { expiresIn: 3600000 })
 
             res.status(200).json(`user : ${findUser.firstName} ${findUser.lastName}, token: ${assignToken}`)
 
         }
-        
+
         res.json("passord incorrect")
 
     } catch (error) {
 
         res.status(400).json(error)
 
-        
+
     }
 }
 
-module.exports = {addUser, login}
+module.exports = { addUser, login }
